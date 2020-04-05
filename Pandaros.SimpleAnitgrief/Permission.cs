@@ -1,4 +1,6 @@
 ﻿using BlockEntities.Implementations;
+using NetworkUI;
+using NetworkUI.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,8 @@ namespace Pandaros.SimpleAnitgrief
     [ModLoader.ModManager]
     public class Permission
     {
+        static List<Players.Player> _warnedPlayers = new List<Players.Player>();
+
         [ModLoader.ModCallback(ModLoader.EModCallbackType.OnTryChangeBlock, "Pandaros.SimpleAntigrief.Permission.OnTryChangeBlockUser")]
         public static void OnTryChangeBlockUser(ModLoader.OnTryChangeBlockData userData)
         {
@@ -25,6 +29,34 @@ namespace Pandaros.SimpleAnitgrief
                     userData.CallbackState = ModLoader.OnTryChangeBlockData.ECallbackState.Cancelled;
                     userData.CallbackConsumedResult = EServerChangeBlockResult.CancelledByCallback;
                 }
+            }
+        }
+
+        [ModLoader.ModCallback(ModLoader.EModCallbackType.OnNPCHit,  "Pandaros.SimpleAntigrief.ColonyManager.Permission.OnHit")]
+        public static void OnHit(NPC.NPCBase npc, ModLoader.OnHitData data)
+        {
+            if ((data.HitSourceType == ModLoader.OnHitData.EHitSourceType.PlayerClick ||
+                 data.HitSourceType == ModLoader.OnHitData.EHitSourceType.PlayerProjectile) && !npc.Colony.Owners.Contains((Players.Player)data.HitSourceObject))
+            {
+                var p = (Players.Player)data.HitSourceObject;
+
+                if (_warnedPlayers.Contains(p))
+                {
+                    ServerManager.Disconnect(p);
+                }
+                else
+                {
+                    NetworkMenu menu = new NetworkMenu();
+                    menu.LocalStorage.SetAs("header", "WARNING");
+                    menu.Width = 800;
+                    menu.Height = 600;
+                    menu.ForceClosePopups = true;
+                    menu.Items.Add(new Label(new LabelData("WARNING: Killing colonists that do not belong to you will result in a kick. This is your first and ONLY warning.", UnityEngine.Color.black)));
+                    NetworkMenuManager.SendServerPopup(p, menu);
+                }
+
+                data.HitDamage = 0;
+                data.ResultDamage = 0;
             }
         }
     }
