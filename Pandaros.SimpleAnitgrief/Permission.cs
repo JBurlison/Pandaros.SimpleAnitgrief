@@ -46,6 +46,7 @@ namespace Pandaros.SimpleAnitgrief
                 }
                 else
                 {
+                    _warnedPlayers.Add(p);
                     NetworkMenu menu = new NetworkMenu();
                     menu.LocalStorage.SetAs("header", "WARNING");
                     menu.Width = 800;
