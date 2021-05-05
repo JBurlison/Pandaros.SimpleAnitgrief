@@ -3,19 +3,25 @@
     "dllpath": "Pandaros.SimpleAnitgrief.dll",
     "name": "Pandaros.SimpleAnitgrief",
     "namepretty": "Pandaros' Simple Antigrief!",
-    "version": "0.1.2.0",
+    "version": "0.1.3.1",
     "enabled": true,
     "marksgamemodded": true,
     "compatibleversions": [
-      "0.7.1"
+      "0.8.1.0"
     ],
     "website": "http://www.settlersmod.com/",
-    "description": "A simple antigrief mod that does not allow other players to change blocks in your colony unless they are part of your colony.",
+    "description": "A simple antigrief mod that does not allow other players to change blocks or kil lyour colonists in your colony unless they are part of your colony.",
     "patchnotes": [
+      {
+        "version": "0.1.3.1",
+        "notes": [
+          "Updated for 8.1"
+        ]
+      },
       {
         "version": "0.1.3.0",
         "notes": [
-          "Added antigrief for "
+          "Added antigrief for colonists"
         ]
       },
       {
